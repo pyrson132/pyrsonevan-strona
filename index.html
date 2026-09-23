@@ -1,82 +1,87 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pyrsonevan.pl — Serwer Minecraft</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+const toast = document.getElementById("toast");
 
-  <!-- NAWIGACJA -->
-  <header class="navbar">
-    <div class="logo">
-      <span>P</span>yrsonevan.pl
-    </div>
-    <button class="menu-toggle" aria-label="Otwórz menu">&#9776;</button>
-    <nav class="nav-links">
-      <a href="#home">Start</a>
-      <a href="#ranks">Rangi</a>
-      <a href="#shop">Sklep</a>
-      <a href="#stats">Statystyki</a>
-      <a href="https://discord.gg" target="_blank" class="discord-btn">Discord</a>
-    </nav>
-  </header>
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => toast.classList.remove("show"), 2800);
+}
 
-  <!-- GLÓWNA SEKCJA (HERO) -->
-  <main id="home">
-    <section class="hero section reveal">
-      <h1>Witaj na <span>Pyrsonevan.pl</span></h1>
-      <p>Dołącz do najlepszej społeczności Minecraft! Skopiuj IP i zagraj z nami już teraz.</p>
-      
-      <div class="hero-buttons">
-        <button id="copyIp" class="btn primary-btn">Kopiuj IP: pyrsonevan.pl</button>
-      </div>
+// Copy IP Functionality
+document.getElementById("copyIp").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText("pyrsonevan.pl");
+    showToast("IP pyrsonevan.pl zostało skopiowane!");
+  } catch {
+    showToast("IP serwera: pyrsonevan.pl");
+  }
+});
 
-      <div class="server-status">
-        Gracze online: <span id="onlinePlayers">0</span>
-      </div>
-    </section>
+// Mobile Menu Toggle
+document.querySelector(".menu-toggle").addEventListener("click", () => {
+  document.querySelector(".nav-links").classList.toggle("open");
+});
 
-    <!-- SEKCJA RANGI I SKLEP -->
-    <section id="ranks" class="section reveal">
-      <h2>Dostępne Rangi</h2>
-      <div class="ranks-grid">
-        <div class="rank-card">
-          <h3>VIP</h3>
-          <p class="price">19.99 zł</p>
-          <button class="buy-btn" data-rank="VIP">Kup teraz</button>
-        </div>
-        <div class="rank-card">
-          <h3>SVIP</h3>
-          <p class="price">34.99 zł</p>
-          <button class="buy-btn" data-rank="SVIP">Kup teraz</button>
-        </div>
-        <div class="rank-card">
-          <h3>GVIP</h3>
-          <p class="price">49.99 zł</p>
-          <button class="buy-btn" data-rank="GVIP">Kup teraz</button>
-        </div>
-        <div class="rank-card highlight">
-          <h3>PYRA</h3>
-          <p class="price">79.99 zł</p>
-          <button class="buy-btn" data-rank="PYRA">Kup teraz</button>
-        </div>
-      </div>
-    </section>
+document.querySelectorAll(".nav-links a").forEach(a => a.addEventListener("click", () => {
+  document.querySelector(".nav-links").classList.remove("open");
+}));
 
-    <!-- STATYSTYKI -->
-    <section id="stats" class="section reveal">
-      <h2>Statystyki Serwera</h2>
-      <div class="stats-box">
-        <p>Stan graczy: <strong id="statPlayers">Ładowanie...</strong></p>
-      </div>
-    </section>
-  </main>
+// Fetch Real Minecraft Server Status from Backend
+async function updateServerStatus() {
+  try {
+   const res = await fetch("https://pyrsonevan-strona.onrender.com/api/status");
+    const data = await res.json();
 
-  <!-- POWIADOMIENIA (TOAST) -->
-  <div id="toast" class="toast"></div>
+    const onlinePlayersEl = document.getElementById("onlinePlayers");
+    const statPlayersEl = document.getElementById("statPlayers");
 
-  <script src="script.js"></script>
-</body>
-</html>
+    if (data.online) {
+      onlinePlayersEl.textContent = data.players;
+      statPlayersEl.textContent = `${data.players} / ${data.maxPlayers}`;
+    } else {
+      onlinePlayersEl.textContent = "0";
+      statPlayersEl.textContent = "Offline";
+    }
+  } catch (err) {
+    document.getElementById("onlinePlayers").textContent = "0";
+    document.getElementById("statPlayers").textContent = "Błąd API";
+  }
+}
+updateServerStatus();
+setInterval(updateServerStatus, 30000); // Refresh every 30s
+
+// Shop Checkout Handler
+document.querySelectorAll(".buy-btn").forEach(button => {
+  button.addEventListener("click", async () => {
+    const rank = button.dataset.rank;
+    
+    try {
+      const res = await fetch("/api/shop/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rank })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        showToast(data.message);
+      } else {
+        showToast(data.message || "Błąd podczas zakupu.");
+      }
+    } catch (err) {
+      showToast("Nie można połączyć się z serwerem płatności.");
+    }
+  });
+});
+
+// Scroll Reveal Observer
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
