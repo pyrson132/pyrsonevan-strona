@@ -29,7 +29,7 @@ document.querySelectorAll(".nav-links a").forEach(a => a.addEventListener("click
 // Fetch Real Minecraft Server Status from Backend
 async function updateServerStatus() {
   try {
-    const res = await fetch("/api/status");
+   const res = await fetch("https://pyrsonevan-strona.onrender.com/api/status");
     const data = await res.json();
 
     const onlinePlayersEl = document.getElementById("onlinePlayers");
