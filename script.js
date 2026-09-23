@@ -167,8 +167,9 @@ document.getElementById('loginBtn')?.addEventListener('click', async () => {
                 loginBtn.innerText = 'Zaloguj się';
             }
         }
-// Czysta obsługa logowania
+        // Bezpieczna obsługa logowania
 document.getElementById('loginBtn')?.addEventListener('click', async (e) => {
+    e.preventDefault();
     const btn = e.target;
     btn.disabled = true;
     const originalText = btn.innerText;
@@ -208,8 +209,9 @@ document.getElementById('loginBtn')?.addEventListener('click', async (e) => {
     }
 });
 
-// Czysta obsługa rejestracji
+// Bezpieczna obsługa rejestracji
 document.getElementById('registerBtn')?.addEventListener('click', async (e) => {
+    e.preventDefault();
     const btn = e.target;
     btn.disabled = true;
     const originalText = btn.innerText;
