@@ -138,24 +138,72 @@ document.getElementById('loginBtn')?.addEventListener('click', async () => {
 
   if (!email || !password) return alert('Uzupełnij e-mail i hasło!');
 
-  const res = await fetch('https://pyrsonevan-strona.onrender.com/api/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password })
-  });
-  const data = await res.json();
-  alert(data.message || (data.token ? 'Zalogowano pomyślnie!' : 'Błąd logowania'));
-});
+ const loginBtn = document.getElementById('loginBtn') || document.querySelector('.login-card button');
+        if (loginBtn) {
+            loginBtn.disabled = true;
+            loginBtn.innerText = 'Logowanie...';
+        }
 
+        const res = await fetch('https://pyrsonevan-strona.onrender.com/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok || data.token) {
+            alert(data.message || 'Zalogowano pomyślnie!');
+            
+            // Ukrywamy okno logowania po sukcesie
+            const authCard = document.querySelector('.login-card') || document.querySelector('.auth-container') || document.querySelector('main');
+            if (authCard) {
+                authCard.style.display = 'none';
+            }
+        } else {
+            alert(data.message || 'Błąd logowania');
+            if (loginBtn) {
+                loginBtn.disabled = false;
+                loginBtn.innerText = 'Zaloguj się';
+            }
+        }
 document.getElementById('registerBtn')?.addEventListener('click', async () => {
   const email = document.getElementById('emailInput').value;
   const password = document.getElementById('passwordInput').value;
 
   if (!email || !password) return alert('Uzupełnij e-mail i hasło!');
 
-  const res = await fetch('https://pyrsonevan-strona.onrender.com/api/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+const regBtn = document.getElementById('registerBtn');
+        if (regBtn) {
+            regBtn.disabled = true;
+            regBtn.innerText = 'Rejestracja...';
+        }
+
+        const res = await fetch('https://pyrsonevan-strona.onrender.com/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            alert(data.message || 'Konto utworzone pomyślnie!');
+            
+            // Ukrywamy formularz po pomyślnej rejestracji
+            const authCard = document.querySelector('.login-card') || document.querySelector('.auth-container') || document.querySelector('main');
+            if (authCard) {
+                authCard.style.display = 'none';
+            }
+        } else {
+            alert(data.message || 'Błąd podczas rejestracji.');
+            
+            // Odblokowujemy przycisk w razie błędu
+            if (regBtn) {
+                regBtn.disabled = false;
+                regBtn.innerText = 'Zarejestruj się';
+            }
+        }
     body: JSON.stringify({ email, password })
   });
   const data = await res.json();
