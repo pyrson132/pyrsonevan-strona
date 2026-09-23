@@ -3,13 +3,16 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const https = require('https');
-
+const { Pool } = require('pg');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'pyrsonevan_secret_key_change_in_production';
 
 // In-memory user database (Replace with SQLite/MySQL/MongoDB for production)
-const users = [];
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
 
 // Middlewares
 app.use(cors());
