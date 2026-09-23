@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pyrsonevan.pl — nowoczesny serwer Minecraft.">
+  <title>Pyrsonevan.pl — Serwer Minecraft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
+
+  <header class="navbar">
+    <a class="logo" href="#home"><span>P</span>yrsonevan.pl</a>
+    <button class="menu-toggle" aria-label="Otwórz menu">☰</button>
+    <nav class="nav-links">
+      <a href="#home">Start</a>
+      <a href="#ranks">Rangi</a>
+      <a href="#shop">Sklep</a>
+      <a href="#stats">Statystyki</a>
+      <a href="#login">Logowanie</a>
+      <a class="discord-btn" href="https://discord.com/" target="_blank" rel="noopener">Discord</a>
+    </nav>
+  </header>
+
+  <main id="home">
+    <section class="hero section">
+      <div class="hero-content reveal">
+        <div class="badge"><span class="dot"></span> SERWER ONLINE</div>
+        <h1>Witaj na <span>Pyrsonevan.pl</span></h1>
+        <p>Dołącz do naszej społeczności Minecraft i rozpocznij swoją przygodę już teraz.</p>
+        <div class="hero-actions">
+          <button class="primary-btn" id="copyIp">Skopiuj IP</button>
+          <a class="secondary-btn" href="#ranks">Zobacz rangi</a>
+        </div>
+        <div class="server-ip">IP: <strong>pyrsonevan.pl</strong></div>
+      </div>
+
+      <div class="hero-card reveal">
+        <div class="cube">⛏</div>
+        <div>
+          <span class="muted">STATUS SERWERA</span>
+          <h3><span class="status-dot"></span> Online</h3>
+          <p><strong id="onlinePlayers">0</strong> graczy online</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="stats">
+      <div class="section-heading reveal">
+        <span>LIVE</span>
+        <h2>Statystyki serwera</h2>
+        <p>Dane demonstracyjne — po podłączeniu API pokażemy prawdziwe dane.</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card reveal"><div class="stat-icon">👥</div><span>Gracze online</span><strong id="statPlayers">0</strong></div>
+        <div class="stat-card reveal"><div class="stat-icon">🟢</div><span>Status</span><strong>ONLINE</strong></div>
+        <div class="stat-card reveal"><div class="stat-icon">🌐</div><span>Adres</span><strong>pyrsonevan.pl</strong></div>
+        <div class="stat-card reveal"><div class="stat-icon">🎮</div><span>Platforma</span><strong>Java</strong></div>
+      </div>
+    </section>
+
+    <section class="section" id="ranks">
+      <div class="section-heading reveal">
+        <span>SKLEP</span>
+        <h2>Wybierz swoją rangę</h2>
+        <p>Odblokuj dodatkowe możliwości na serwerze.</p>
+      </div>
+      <div class="rank-grid">
+        <article class="rank-card reveal">
+          <div class="rank-top"><span>VIP</span><b>19,99 zł</b></div>
+          <p>Podstawowe przywileje dla aktywnych graczy.</p>
+          <ul><li>✓ Kolorowy nick</li><li>✓ Zestaw VIP</li><li>✓ Dodatkowe komendy</li></ul>
+          <button class="buy-btn" data-rank="VIP">Kup VIP</button>
+        </article>
+        <article class="rank-card featured reveal">
+          <div class="popular">POPULARNA</div>
+          <div class="rank-top"><span>SVIP</span><b>34,99 zł</b></div>
+          <p>Więcej możliwości i wyjątkowych dodatków.</p>
+          <ul><li>✓ Wszystko z VIP</li><li>✓ Zestaw SVIP</li><li>✓ Więcej możliwości</li></ul>
+          <button class="buy-btn" data-rank="SVIP">Kup SVIP</button>
+        </article>
+        <article class="rank-card reveal">
+          <div class="rank-top"><span>GVIP</span><b>49,99 zł</b></div>
+          <p>Rozszerzone przywileje dla najbardziej aktywnych.</p>
+          <ul><li>✓ Wszystko z SVIP</li><li>✓ Zestaw GVIP</li><li>✓ Dodatkowe bonusy</li></ul>
+          <button class="buy-btn" data-rank="GVIP">Kup GVIP</button>
+        </article>
+        <article class="rank-card special reveal">
+          <div class="rank-top"><span>PYRA</span><b>79,99 zł</b></div>
+          <p>Specjalna ranga dla wyjątkowych członków społeczności.</p>
+          <ul><li>✓ Wszystko z GVIP</li><li>✓ Ekskluzywne dodatki</li><li>✓ Specjalne przywileje</li></ul>
+          <button class="buy-btn" data-rank="PYRA">Kup PYRA</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="shop">
+      <div class="shop-banner reveal">
+        <div><span>SKLEP PYRSONEVAN.PL</span><h2>Wspieraj serwer i odbieraj nagrody.</h2><p>Przyciski zakupowe są przygotowane pod późniejsze podłączenie systemu płatności.</p></div>
+        <a href="#ranks" class="primary-btn">Przejdź do sklepu</a>
+      </div>
+    </section>
+
+    <section class="section auth-section" id="login">
+      <div class="auth-box reveal">
+        <div class="section-heading left">
+          <span>KONTO</span>
+          <h2>Logowanie i rejestracja</h2>
+          <p>Interfejs gotowy do podłączenia prawdziwego systemu kont.</p>
+        </div>
+        <div class="social-login">
+          <button class="social google" id="googleLogin">G <span>Kontynuuj z Google</span></button>
+          <button class="social discord" id="discordLogin">◉ <span>Kontynuuj z Discord</span></button>
+        </div>
+        <div class="or"><span>lub</span></div>
+        <form id="authForm">
+          <input type="email" placeholder="Adres e-mail" required>
+          <input type="password" placeholder="Hasło" required>
+          <button class="primary-btn" type="submit">Zaloguj się</button>
+          <p class="form-note">Rejestracja i OAuth wymagają backendu oraz konfiguracji Google/Discord.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="section discord-section">
+      <div class="discord-card reveal">
+        <div><span class="discord-label">SPOŁECZNOŚĆ</span><h2>Dołącz do naszego Discorda</h2><p>Rozmawiaj z graczami, odbieraj informacje i poznawaj aktualności.</p></div>
+        <a class="discord-big" href="https://discord.com/" target="_blank" rel="noopener">Dołącz na Discord →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="logo"><span>P</span>yrsonevan.pl</div>
+    <p>© 2026 Pyrsonevan.pl. Wszystkie prawa zastrzeżone.</p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
