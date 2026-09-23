@@ -83,7 +83,7 @@ document.getElementById("authForm").addEventListener("submit", async e => {
 
   try {
     // Attempt login first
-    let res = await fetch("/api/auth/login", {
+  let res = await fetch("https://pyrsonevan-strona.onrender.com/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
@@ -93,7 +93,7 @@ document.getElementById("authForm").addEventListener("submit", async e => {
 
     // If login fails because user doesn't exist, attempt auto-registration
     if (!res.ok && data.message === "Błędny e-mail lub hasło!") {
-      res = await fetch("/api/auth/register", {
+    res = await fetch("https://pyrsonevan-strona.onrender.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
