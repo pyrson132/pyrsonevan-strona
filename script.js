@@ -52,7 +52,7 @@ async function updateServerStatus() {
   }
 }
 updateServerStatus();
-setInterval(updateServerStatus, 30000); // Refresh every 30s
+setInterval(updateServerStatus, 30000);
 
 // Shop Checkout Handler
 document.querySelectorAll(".buy-btn").forEach(button => {
