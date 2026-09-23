@@ -64,60 +64,52 @@ app.get('/api/status', (req, res) => {
 // ==========================================
 // 2. AUTHENTICATION ROUTES (REGISTER & LOGIN)
 // ==========================================
-app.post('/api/auth/register', async (req, res) => {
+// Endpoint Rejestracji
+app.post('/api/register', async (req, res) => {
   const { email, password } = req.body;
-
+  
   if (!email || !password) {
     return res.status(400).json({ success: false, message: 'Wypełnij wszystkie pola!' });
   }
 
-  const existingUser = users.find(u => u.email === email);
-  if (existingUser) {
-    return res.status(400).json({ success: false, message: 'Konto z tym e-mailem już istnieje!' });
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const result = await pool.query(
+      'INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email',
+      [email, hashedPassword]
+    );
+    res.json({ success: true, message: 'Konto utworzone pomyślnie!', user: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd podczas rejestracji (możliwe, że e-mail już istnieje).' });
   }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = {
-    id: users.length + 1,
-    email,
-    password: hashedPassword,
-    rank: 'Gracz',
-    createdAt: new Date().toISOString()
-  };
-
-  users.push(newUser);
-
-  const token = jwt.sign({ id: newUser.id, email: newUser.email }, JWT_SECRET, { expiresIn: '7d' });
-
-  res.json({
-    success: true,
-    message: 'Rejestracja udana!',
-    token,
-    user: { email: newUser.email, rank: newUser.rank }
-  });
 });
 
-app.post('/api/auth/login', async (req, res) => {
+// Endpoint Logowania
+app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
-
-  const user = users.find(u => u.email === email);
-  if (!user) {
-    return res.status(400).json({ success: false, message: 'Błędny e-mail lub hasło!' });
+  
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Wypełnij wszystkie pola!' });
   }
 
-  const validPassword = await bcrypt.compare(password, user.password);
-  if (!validPassword) {
-    return res.status(400).json({ success: false, message: 'Błędny e-mail lub hasło!' });
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (result.rows.length === 0) {
+      return res.status(400).json({ success: false, message: 'Nieprawidłowy e-mail lub hasło.' });
+    }
+
+    const user = result.rows[0];
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ success: false, message: 'Nieprawidłowy e-mail lub hasło.' });
+    }
+
+    res.json({ success: true, message: 'Zalogowano pomyślnie!', token: 'fake-jwt-token', user: { id: user.id, email: user.email } });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Błąd serwera podczas logowania.' });
   }
-
-  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
-
-  res.json({
-    success: true,
-    message: 'Zalogowano pomyślnie!',
-    token,
-    user: { email: user.email, rank: user.rank }
-  });
 });
 
 // ==========================================
