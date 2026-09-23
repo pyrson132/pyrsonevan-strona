@@ -167,45 +167,84 @@ document.getElementById('loginBtn')?.addEventListener('click', async () => {
                 loginBtn.innerText = 'Zaloguj się';
             }
         }
-document.getElementById('registerBtn')?.addEventListener('click', async () => {
-  const email = document.getElementById('emailInput').value;
-  const password = document.getElementById('passwordInput').value;
+// Czysta obsługa logowania
+document.getElementById('loginBtn')?.addEventListener('click', async (e) => {
+    const btn = e.target;
+    btn.disabled = true;
+    const originalText = btn.innerText;
+    btn.innerText = 'Logowanie...';
 
-  if (!email || !password) return alert('Uzupełnij e-mail i hasło!');
+    const email = document.getElementById('emailInput')?.value;
+    const password = document.getElementById('passwordInput')?.value;
 
-const regBtn = document.getElementById('registerBtn');
-        if (regBtn) {
-            regBtn.disabled = true;
-            regBtn.innerText = 'Rejestracja...';
+    if (!email || !password) {
+        alert('Uzupełnij e-mail i hasło!');
+        btn.disabled = false;
+        btn.innerText = originalText;
+        return;
+    }
+
+    try {
+        const res = await fetch('https://pyrsonevan-strona.onrender.com/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (res.ok || data.token) {
+            alert(data.message || 'Zalogowano pomyślnie!');
+            const authCard = document.querySelector('.login-card') || document.querySelector('.auth-container') || document.querySelector('main');
+            if (authCard) authCard.style.display = 'none';
+        } else {
+            alert(data.message || 'Błąd logowania');
+            btn.disabled = false;
+            btn.innerText = originalText;
         }
+    } catch (err) {
+        alert('Błąd połączenia z serwerem.');
+        btn.disabled = false;
+        btn.innerText = originalText;
+    }
+});
 
+// Czysta obsługa rejestracji
+document.getElementById('registerBtn')?.addEventListener('click', async (e) => {
+    const btn = e.target;
+    btn.disabled = true;
+    const originalText = btn.innerText;
+    btn.innerText = 'Rejestracja...';
+
+    const email = document.getElementById('emailInput')?.value;
+    const password = document.getElementById('passwordInput')?.value;
+
+    if (!email || !password) {
+        alert('Uzupełnij e-mail i hasło!');
+        btn.disabled = false;
+        btn.innerText = originalText;
+        return;
+    }
+
+    try {
         const res = await fetch('https://pyrsonevan-strona.onrender.com/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
         });
-
         const data = await res.json();
 
         if (res.ok) {
-            alert(data.message || 'Konto utworzone pomyślnie!');
-            
-            // Ukrywamy formularz po pomyślnej rejestracji
+            alert(data.message || 'Konto utworzone!');
             const authCard = document.querySelector('.login-card') || document.querySelector('.auth-container') || document.querySelector('main');
-            if (authCard) {
-                authCard.style.display = 'none';
-            }
+            if (authCard) authCard.style.display = 'none';
         } else {
             alert(data.message || 'Błąd podczas rejestracji.');
-            
-            // Odblokowujemy przycisk w razie błędu
-            if (regBtn) {
-                regBtn.disabled = false;
-                regBtn.innerText = 'Zarejestruj się';
-            }
+            btn.disabled = false;
+            btn.innerText = originalText;
         }
-    body: JSON.stringify({ email, password })
-  });
-  const data = await res.json();
-  alert(data.message || 'Konto utworzone!');
+    } catch (err) {
+        alert('Błąd połączenia z serwerem.');
+        btn.disabled = false;
+        btn.innerText = originalText;
+    }
 });
