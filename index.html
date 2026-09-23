@@ -118,12 +118,14 @@
           <button class="social discord" id="discordLogin">◉ <span>Kontynuuj z Discord</span></button>
         </div>
         <div class="or"><span>lub</span></div>
-        <form id="authForm">
-          <input type="email" placeholder="Adres e-mail" required>
-          <input type="password" placeholder="Hasło" required>
-          <button class="primary-btn" type="submit">Zaloguj się</button>
-          <p class="form-note">Rejestracja i OAuth wymagają backendu oraz konfiguracji Google/Discord.</p>
-        </form>
+    <form id="authForm">
+  <input type="email" id="emailInput" placeholder="Adres e-mail" required>
+  <input type="password" id="passwordInput" placeholder="Hasło" required>
+  <div style="display: flex; gap: 10px; margin-top: 10px;">
+    <button class="primary-btn" type="button" id="loginBtn">Zaloguj się</button>
+    <button class="primary-btn" type="button" id="registerBtn" style="background: #4A5568;">Zarejestruj się</button>
+  </div>
+</form>
       </div>
     </section>
 
