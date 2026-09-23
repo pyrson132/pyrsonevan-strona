@@ -19,6 +19,7 @@
       <a href="#ranks">Rangi</a>
       <a href="#shop">Sklep</a>
       <a href="#stats">Statystyki</a>
+      <a href="#login">Logowanie</a>
       <a href="https://discord.gg" target="_blank" class="discord-btn">Discord</a>
     </nav>
   </header>
@@ -35,6 +36,31 @@
 
       <div class="server-status">
         Gracze online: <span id="onlinePlayers">0</span>
+      </div>
+    </section>
+
+    <!-- FORMULARZ LOGOWANIA I REJESTRACJI -->
+    <section id="login" class="login-card section reveal">
+      <div class="auth-container">
+        <span class="badge">KONTO</span>
+        <h2>Logowanie i rejestracja</h2>
+        <p class="subtitle">Interfejs gotowy do podłączenia prawdziwego systemu kont.</p>
+
+        <div class="oauth-buttons">
+          <button id="googleLogin" class="oauth-btn">G Kontynuuj z Google</button>
+          <button id="discordLogin" class="oauth-btn">Kontynuuj z Discord</button>
+        </div>
+
+        <div class="divider">lub</div>
+
+        <form id="authForm">
+          <input type="email" id="emailInput" placeholder="Adres e-mail" required />
+          <input type="password" id="passwordInput" placeholder="Hasło" required />
+          <div class="auth-buttons">
+            <button type="submit" id="loginBtn" class="btn primary-btn">Zaloguj się</button>
+            <button type="button" id="registerBtn" class="btn secondary-btn">Zarejestruj się</button>
+          </div>
+        </form>
       </div>
     </section>
 
@@ -77,7 +103,7 @@
   <!-- POWIADOMIENIA (TOAST) -->
   <div id="toast" class="toast"></div>
 
-  <!-- POŁĄCZENIE ZE SKRYPTEM JS -->
+  <!-- POŁĄCZENIE Z PLIKIEM SCRIPT.JS -->
   <script src="script.js"></script>
 </body>
 </html>
